@@ -3,3 +3,6 @@
 
 # javadoc
 doc/
+
+# java classes
+*.class
