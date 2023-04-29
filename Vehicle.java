@@ -3,7 +3,7 @@ import java.io.Serializable;
 /**
  * Classe que representa um veiculo.
  *
- * @author Diogo Borges Rodrigues
+ * @see Tire
  */
 
 public class Vehicle implements Serializable {
@@ -294,7 +294,7 @@ public class Vehicle implements Serializable {
 
     for (int i = 0; i < 4; i++) {
       hash += this.TIRES[i].hashCode() % 100000;
-      hash = (int)Math.floor(hash / 7);
+      hash = (int) Math.floor(hash / 7);
     }
 
     hash = Math.abs(hash) % 1000;
