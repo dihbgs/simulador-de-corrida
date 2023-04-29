@@ -1,10 +1,12 @@
+import java.io.Serializable;
+
 /**
  * Classe que representa uma roda de um carro.
  * 
  * @author Diogo Borges Rodrigues
  */
 
-public class Tire {
+public class Tire implements Serializable {
   private boolean isCalibrated;
 
   /*

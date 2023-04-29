@@ -1,10 +1,12 @@
+import java.io.Serializable;
+
 /**
  * Classe que representa um veiculo.
- * 
+ *
  * @author Diogo Borges Rodrigues
  */
 
-public class Vehicle {
+public class Vehicle implements Serializable {
   private static final float FUEL_COST = 0.55f;
   private static final String[] MODEL_ONE = {
       "    ____\n",
@@ -47,9 +49,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para obter o ID do veiculo.
-   * 
+   *
    * @param void
-   * 
+   *
    * @return int - ID do veiculo.
    */
   public int getId() {
@@ -58,9 +60,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para obter a distancia percorrida pelo veiculo.
-   * 
+   *
    * @param void
-   * 
+   *
    * @return int - Distancia percorrida pelo veiculo.
    */
   public int getDistance() {
@@ -69,9 +71,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para obter o combustivel restante do veiculo.
-   * 
+   *
    * @param void
-   * 
+   *
    * @return float - Combustivel restante do veiculo.
    */
   public float getFuel() {
@@ -80,9 +82,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para obter a situacao do IPVA do veiculo.
-   * 
+   *
    * @param void
-   * 
+   *
    * @return boolean - Veiculo possui IPVA pago.
    */
   public boolean getIpva() {
@@ -91,9 +93,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para obter as rodas do veiculo.
-   * 
+   *
    * @return Tire[] - Rodas do veiculo.
-   * 
+   *
    * @param void
    */
   public Tire[] getTires() {
@@ -102,9 +104,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para obter uma roda especifica do veiculo.
-   * 
+   *
    * @param int - ID da roda a ser obtida (0, 1, 2 ou 3).
-   * 
+   *
    * @return Tire - Roda especifica do veiculo.
    */
   public Tire getTire(int tireId) {
@@ -118,9 +120,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para reabastecer o veiculo.
-   * 
+   *
    * @param float - Quantidade de combustivel a ser adicionada.
-   * 
+   *
    * @return void
    */
   public void refuel(float fuel) {
@@ -135,9 +137,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para calibrar todos os pneus do veiculo.
-   * 
+   *
    * @param tireId - ID do pneu a ser calibrado (0, 1, 2 ou 3).
-   * 
+   *
    * @return void
    */
   public void calibrateTire(int tireId) {
@@ -147,14 +149,14 @@ public class Vehicle {
     }
 
     this.TIRES[tireId].setCalibration(true);
-    System.out.println("Pneu #" + tireId + " calibrado!");
+    System.out.println("Pneu #" + (tireId + 1) + " calibrado!");
   }
 
   /**
    * Esse metodo e utilizado para calibrar todos os pneus do veiculo.
-   * 
+   *
    * @param void
-   * 
+   *
    * @return void
    */
   public void calibrateAllTires() {
@@ -165,9 +167,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para esvaziar todos os pneus do veiculo.
-   * 
+   *
    * @param void
-   * 
+   *
    * @return void
    */
   public void emptyAllTires() {
@@ -178,9 +180,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para esvaziar um pneu do veiculo.
-   * 
+   *
    * @param int - ID do pneu a ser esvaziado (0, 1, 2 ou 3).
-   * 
+   *
    * @return void
    */
   public void emptyTire(int tireId) {
@@ -190,14 +192,14 @@ public class Vehicle {
     }
 
     this.TIRES[tireId].setCalibration(false);
-    System.out.println("Pneu #" + tireId + " esvaziado!");
+    System.out.println("Pneu #" + (tireId + 1) + " esvaziado!");
   }
 
   /**
    * Esse metodo e utilizado para desenhar o veiculo.
-   * 
+   *
    * @param void
-   * 
+   *
    * @return void
    */
   public void draw() {
@@ -214,9 +216,9 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para mover o veiculo.
-   * 
+   *
    * @param void
-   * 
+   *
    * @return void
    */
   public void move() {
@@ -225,17 +227,18 @@ public class Vehicle {
       return;
     }
 
+    this.fuel -= Vehicle.FUEL_COST;
     this.distance += 1;
     System.out.println("Veiculo #" + this.ID + " se moveu!");
   }
 
   /**
    * Esse metodo e utilizado para imprimir informacoes sobre o veiculo.
-   * 
+   *
    * @param void
-   * 
+   *
    * @return String - Informacoes sobre o veiculo.
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   public String toString() {
@@ -245,7 +248,7 @@ public class Vehicle {
   /**
    * Esse metodo e utilizado para verificar se o veiculo tem combustivel
    * suficiente para se mover
-   * 
+   *
    * @return boolean - Se o veiculo tem combustivel suficiente para se mover.
    */
   private boolean hasEnoughFuel() {
@@ -255,9 +258,9 @@ public class Vehicle {
   /**
    * Esse metodo e utilizado para verificar se o veiculo esta com todas as rodas
    * calibradas.
-   * 
+   *
    * @return boolean - Se o veiculo esta com todas as rodas calibradas.
-   * 
+   *
    * @see Tire#getCalibration()
    */
   private boolean isFullyCalibrated() {
@@ -272,7 +275,7 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para verificar se o veiculo pode se mover.
-   * 
+   *
    * @return boolean - Se o veiculo pode se mover.
    */
   private boolean canMove() {
@@ -281,19 +284,20 @@ public class Vehicle {
 
   /**
    * Esse metodo e utilizado para gerar o ID do veiculo.
-   * 
+   *
    * @return int - ID do veiculo.
-   * 
+   *
    * @see java.lang.Object#hashCode()
    */
   private int generateHash() {
-    int hash = this.hashCode();
+    int hash = this.hashCode() % 100000;
 
     for (int i = 0; i < 4; i++) {
-      hash += this.TIRES[i].hashCode();
+      hash += this.TIRES[i].hashCode() % 100000;
+      hash = (int)Math.floor(hash / 7);
     }
 
-    hash = Math.abs(hash) % 10000;
+    hash = Math.abs(hash) % 1000;
 
     return hash;
   }

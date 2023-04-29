@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import java.lang.SuppressWarnings;
+
 public class Simulator {
   private ArrayList<Vehicle> vehicles;
 
@@ -75,7 +77,7 @@ public class Simulator {
 
   private void printData(Vehicle vehicle, int order) {
     System.out
-        .print("   " + order + "\t| #" + vehicle.getId() + "\t| \t" + vehicle.getFuel() + "\t| " + vehicle.getIpva());
+        .printf("   %d\t| #%d\t| \t%.2f\t| %s", order, vehicle.getId(), vehicle.getFuel(), (vehicle.getIpva() ? "Sim" : "Nao"));
 
     for (int i = 0; i < 4; i++) {
       System.out.print("\t| " + (vehicle.getTire(i).getCalibration() ? "Calibrado" : "Vazio\t"));
@@ -86,6 +88,18 @@ public class Simulator {
 
   private void printHeader() {
     System.out.println(" Nº\t| ID\t| Combustivel\t| IPVA\t| Pneu #1\t| Pneu #2\t| Pneu #3\t| Pneu #4");
+  }
+
+  public void printIds() {
+    System.out.print("Lista de todos os IDs registrados: \n[");
+    for(int i=0; i<vehicles.size(); i++) {
+      System.out.print(" #" + vehicles.get(i).getId());
+    }
+    System.out.println(" ]");
+  }
+
+  public boolean validateId(int id) {
+    return getVehicleById(id) != null;
   }
 
   public void emptyTire(int vehicleId, int tireId) {
@@ -151,13 +165,14 @@ public class Simulator {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void loadData() {
     File file = new File("vehicles.dat");
-
+    
     try {
       FileInputStream fileInputStream = new FileInputStream(file);
       ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-
+      
       this.vehicles = (ArrayList<Vehicle>) objectInputStream.readObject();
 
       objectInputStream.close();
