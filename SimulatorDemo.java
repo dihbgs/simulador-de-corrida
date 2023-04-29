@@ -1,17 +1,44 @@
 import java.util.Scanner;
 
+/**
+ * Classe utilizada para testar o simulador.
+ * 
+ * @see Vehicle
+ * @see Simulator
+ */
+
 public class SimulatorDemo {
   private static Scanner scanner = new Scanner(System.in);
 
-  public static void main(String[] args) {
-    Scanner scanner = new Scanner(System.in);
-    Simulator simulator = new Simulator();
+  private static Simulator simulator = new Simulator();
 
-    menu(simulator);
+  /**
+   * Esse metodo e utilizado para iniciar o simulador.
+   * 
+   * @param String[] - Argumentos passados via linha de comando.
+   * 
+   * @return void
+   * 
+   * @see Vehicle
+   * @see Simulator
+   */
+  public static void main(String[] args) {
+    scanner = new Scanner(System.in);
+    simulator = new Simulator();
+
+    menu();
     scanner.close();
   }
 
-  public static void menu(Simulator simulator) {
+  /**
+   * Esse metodo e utilizado para imprimir as opcoes do menu.
+   * 
+   * @return void
+   * 
+   * @see Vehicle
+   * @see Simulator
+   */
+  public static void menu() {
     boolean isRunning = true;
     int option = -1;
 
@@ -22,31 +49,31 @@ public class SimulatorDemo {
 
       switch (option) {
         case 1:
-          addVehicle(simulator);
+          addVehicle();
           break;
         case 2:
-          removeVehicle(simulator);
+          removeVehicle();
           break;
         case 3:
-          refuelVehicle(simulator);
+          refuelVehicle();
           break;
         case 4:
-          moveVehicle(simulator);
+          moveVehicle();
           break;
         case 5:
-          moveAllVehicles(simulator);
+          moveAllVehicles();
           break;
         case 6:
-          printVehicle(simulator);
+          printVehicle();
           break;
         case 7:
-          printAllVehicles(simulator);
+          printAllVehicles();
           break;
         case 8:
-          calibrateTire(simulator);
+          calibrateTire();
           break;
         case 9:
-          calibrateAllTires(simulator);
+          calibrateAllTires();
           break;
         case 10:
           System.out.println("Desenhando pista de corrida.");
@@ -63,7 +90,7 @@ public class SimulatorDemo {
           System.out.println("Dados carregados.\n");
           break;
         case -2:
-          //debug(simulator);
+          // debug(simulator);
           break;
         default:
           System.out.println("Saindo...");
@@ -73,55 +100,64 @@ public class SimulatorDemo {
     }
   }
 
-  private static void moveAllVehicles(Simulator simulator) {
-    if(isEmpty(simulator)) {
+  /**
+   * Move todos os veiculos.
+   */
+  private static void moveAllVehicles() {
+    if (isEmpty()) {
       System.out.println("Nenhum veiculo disponivel.\n");
       return;
     }
-    
+
     System.out.println("Movendo todos os veiculos.");
     simulator.moveAllVehicles();
     System.out.println();
   }
 
-  private static void calibrateAllTires(Simulator simulator) {
+  /**
+   * Calibrar todos os pneus de um veiculo.
+   */
+  private static void calibrateAllTires() {
     int option, vehicleId;
 
-    if(isEmpty(simulator)) {
+    if (isEmpty()) {
       System.out.println("Nenhum veiculo disponivel.\n");
       return;
     }
-    
+
     System.out.println("Esvaziando/calibrando todos os pneus de um veiculo.");
     System.out.print("(1) - Esvaziar pneu. \n(2) - Calibrar pneu. \n(3) - Cancelar. \nDigite a opcao desejada: ");
     option = getInputRange(1, 3);
-    
-    if(option == 3) {
+
+    if (option == 3) {
       System.out.println();
       return;
     }
 
     simulator.printIds();
     System.out.print("\nDigite o id do veiculo: ");
-    vehicleId = getValidId(simulator);
+    vehicleId = getValidId();
 
-    if(option == 1) {
+    if (option == 1) {
       simulator.emptyAllTires(vehicleId);
       return;
     }
-    
-    if(option == 2) {
+
+    if (option == 2) {
       simulator.calibrateAllTires(vehicleId);
       return;
     }
 
     System.out.println();
   }
-  
-  private static void calibrateTire(Simulator simulator) {
+
+  /**
+   * Calibra um pneu de um veiculo.
+   */
+  private static void calibrateTire() {
     int option, vehicleId;
-    
-    if(isEmpty(simulator)) {
+
+    if (isEmpty()) {
       System.out.println("Nenhum veiculo disponivel.\n");
       return;
     }
@@ -130,22 +166,22 @@ public class SimulatorDemo {
     System.out.print("(1) - Esvaziar pneu. \n(2) - Calibrar pneu. \n(3) - Cancelar. \nDigite a opcao desejada: ");
     option = getInputRange(1, 3);
 
-    if(option == 3) {
+    if (option == 3) {
       System.out.println();
       return;
     }
 
     simulator.printIds();
     System.out.print("\nDigite o id do veiculo: ");
-    vehicleId = getValidId(simulator);
+    vehicleId = getValidId();
 
-    if(option == 1) {
+    if (option == 1) {
       System.out.print("\nDigite o pneu que deseja esvaziar: ");
       simulator.emptyTire(vehicleId, getInputRange(1, 4) - 1);
       return;
     }
 
-    if( option == 2) {
+    if (option == 2) {
       System.out.print("\nDigite o pneu que deseja calibrar: ");
       simulator.calibrateTire(vehicleId, getInputRange(1, 4) - 1);
       return;
@@ -154,36 +190,45 @@ public class SimulatorDemo {
     System.out.println();
   }
 
-  private static void printAllVehicles(Simulator simulator) {
-    if(isEmpty(simulator)) {
+  /**
+   * Imprime dados de todos os veiculos.
+   */
+  private static void printAllVehicles() {
+    if (isEmpty()) {
       System.out.println("Nenhum veiculo disponivel.\n");
       return;
     }
-    
+
     System.out.println("Imprimindo dados de todos os veiculos.");
     simulator.printAllVehicles();
     System.out.println();
   }
 
-  private static void printVehicle(Simulator simulator) {
-    if(isEmpty(simulator)) {
+  /**
+   * Imprime as informacoes de um veiculo.
+   */
+  private static void printVehicle() {
+    if (isEmpty()) {
       System.out.println("Nenhum veiculo disponivel.\n");
       return;
     }
-    
+
     System.out.println("Imprimindo dados de um veiculo.");
     simulator.printIds();
     System.out.print("Digite o id do veiculo que deseja imprimir: ");
-    simulator.printVehicle(getInput(), true);
+    simulator.printVehicle(getInput());
     System.out.println();
   }
 
-  private static void moveVehicle(Simulator simulator) {
-    if(isEmpty(simulator)) {
+  /**
+   * Move um veiculo.
+   */
+  private static void moveVehicle() {
+    if (isEmpty()) {
       System.out.println("Nenhum veiculo disponivel.\n");
       return;
     }
-    
+
     System.out.println("Movendo um veiculo.");
     simulator.printAllVehicles();
     System.out.print("Digite o id do veiculo que deseja mover: ");
@@ -191,8 +236,11 @@ public class SimulatorDemo {
     System.out.println();
   }
 
-  private static void refuelVehicle(Simulator simulator) {
-    if(isEmpty(simulator)) {
+  /**
+   * Reabastece um veiculo.
+   */
+  private static void refuelVehicle() {
+    if (isEmpty()) {
       System.out.println("Nenhum veiculo disponivel.\n");
       return;
     }
@@ -200,15 +248,18 @@ public class SimulatorDemo {
     System.out.println("Abastecendo um veiculo.");
     simulator.printAllVehicles();
     System.out.print("Digite o id do veiculo que deseja abastecer: ");
-    int id = getValidId(simulator);
+    int id = getValidId();
     System.out.print("\nDigite a quantidade de combustivel que deseja abastecer: ");
     float fuel = getInput();
     simulator.refuelVehicle(id, fuel);
     System.out.println("\nVeiculo abastecido.\n");
   }
 
-  private static void removeVehicle(Simulator simulator) {
-    if(isEmpty(simulator)) {
+  /**
+   * Remove um veiculo do simulador.
+   */
+  private static void removeVehicle() {
+    if (isEmpty()) {
       System.out.println("Nenhum veiculo disponivel.\n");
       return;
     }
@@ -220,7 +271,10 @@ public class SimulatorDemo {
     System.out.println("Veiculo removido.\n");
   }
 
-  private static void addVehicle(Simulator simulator) {
+  /**
+   * Adiciona um veiculo ao simulador.
+   */
+  private static void addVehicle() {
     if (simulator.getVehicles().size() >= 20) {
       System.out.println("Nao e possivel adicionar mais veiculos.\n");
       return;
@@ -233,6 +287,16 @@ public class SimulatorDemo {
     System.out.println(simulator.getVehicles().size() + " veiculos no total.\n");
   }
 
+  /**
+   * Recebe um valor de entrada e verifica se ele e valido.
+   * 
+   * @return int - valor de entrada
+   * 
+   * @throws Exception caso o valor de entrada nao seja um inteiro
+   * 
+   * @see Exception
+   * @see Scanner
+   */
   private static int getInput() {
     int option = -1;
 
@@ -248,7 +312,14 @@ public class SimulatorDemo {
     return option;
   }
 
-  private static int getValidId(Simulator simulator) {
+  /**
+   * Recebe um id de veiculo e verifica se ele e valido.
+   * 
+   * @param
+   * 
+   * @return int - id do veiculo
+   */
+  private static int getValidId() {
     int id = getInput();
     boolean isValid = simulator.validateId(id);
 
@@ -261,10 +332,22 @@ public class SimulatorDemo {
     return id;
   }
 
+  /**
+   * Recebe um valor de entrada e verifica se esta dentro do intervalo
+   * especificado.
+   * 
+   * @param int start
+   * @param int end
+   * 
+   * @return int - valor de entrada
+   * 
+   * @throws Exception caso o valor de entrada nao esteja dentro do intervalo
+   *                   especificado.
+   */
   private static int getInputRange(int start, int end) {
     int input = getInput();
 
-    while(input < start || input > end) {
+    while (input < start || input > end) {
       System.out.print("O valor inserido deve estar entre (" + start + " ~ " + end + "): ");
       input = getInput();
     }
@@ -272,10 +355,22 @@ public class SimulatorDemo {
     return input;
   }
 
-  private static boolean isEmpty(Simulator simulator) {
+  /**
+   * Verifica se o simulador esta vazio.
+   * 
+   * @param
+   * 
+   * @return boolean - true se estiver vazio, false caso contrario.
+   */
+  private static boolean isEmpty() {
     return simulator.getVehicles().isEmpty();
   }
 
+  /**
+   * Imprime as opcoes do menu.
+   * 
+   * @return void
+   */
   private static void printOptions() {
     System.out.println("==========\tMenu de Opcoes\t==========");
     System.out.println(" 1 - Adicionar um veiculo.");
