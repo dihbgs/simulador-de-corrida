@@ -16,9 +16,32 @@ public class Simulator {
 
   /**
    * Esse metodo e utilizado para criar um novo simulador.
+   * 
+   * @param void
+   * 
+   * @return void
+   * 
+   * @see Vehicle
    */
   public Simulator() {
+    this(0);
+  }
+
+  /**
+   * Esse metodo e utilizado para criar um novo simulador.
+   * 
+   * @param int - Quantidade de veiculos a serem criados.
+   * 
+   * @return void
+   * 
+   * @see Vehicle
+   */
+  public Simulator(int vehicles) {
     this.vehicles = new ArrayList<Vehicle>();
+
+    for (int i = 0; i < vehicles; i++) {
+      this.vehicles.add(new Vehicle());
+    }
   }
 
   /**
