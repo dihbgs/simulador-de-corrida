@@ -267,7 +267,7 @@ public class SimulatorDemo {
     System.out.println("Removendo um veiculo.");
     simulator.printIds();
     System.out.println("Digite o id do veiculo que deseja remover: ");
-    simulator.removeVehicle(getInput());
+    simulator.removeVehicle(getValidId());
     System.out.println("Veiculo removido.\n");
   }
 
