@@ -6,3 +6,6 @@ doc/
 
 # java classes
 *.class
+
+# deprecated files
+*Deprecated.java
