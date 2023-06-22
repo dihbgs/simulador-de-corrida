@@ -1,5 +1,7 @@
 public class Bicycle extends Vehicle {
-   Bicycle(int x, int y, int width, int height) {
-      super(x, y, width, height);
+   Bicycle() {
+      super();
+      this.models[0] = Vehicle.BICYCLE;
+      this.models[1] = Vehicle.BICYCLE_SELECTED;
    }
 }

@@ -17,15 +17,17 @@ public class Road extends JComponent implements MouseListener, ActionListener {
    }
 
    protected void paintComponent(Graphics context) {
-      super.paintComponent(context);
-
       Graphics2D graphics = (Graphics2D) context;
-      graphics.setColor(new Color(200, 200, 200));
+      super.paintComponent(graphics);
 
-      for (int row = 0; row < this.width; row += 16) {
+      graphics.setColor(new Color(40, 40, 40));
+      graphics.fillRect(0,0, width,height);
+
+      graphics.setColor(new Color(100, 100, 100));
+      for (int row = 0; row < this.width; row += 32) {
          graphics.drawLine(row, 0, row, this.height);
       }
-      for (int col = 0; col < this.height; col += 16) {
+      for (int col = 0; col < this.height; col += 32) {
          graphics.drawLine(0, col, this.width, col);
       }
 
@@ -35,9 +37,25 @@ public class Road extends JComponent implements MouseListener, ActionListener {
    }
 
    public void addVehicle(Vehicle vehicle) {
+      if(this.vehicles.size() >= 19) {
+         System.err.println("Limite de 20 veiculos atingido.");
+         return;
+      }
+
       this.vehicles.add(vehicle);
    }
 
+   public int[] getAllIds() {
+      int[] ids = new int[this.vehicles.size()];
+
+      for(int i=0; i<ids.length; i++) {
+         ids[i] = this.vehicles.get(i).getID();
+      }
+
+      return ids;
+   }
+
+   // =================================================================
    public Dimension getMaximumSize() {
       return getPreferredSize();
    }
@@ -56,12 +74,23 @@ public class Road extends JComponent implements MouseListener, ActionListener {
    }
 
    public void mouseClicked(MouseEvent mouse) {
+      
       for (Vehicle vehicle : vehicles) {
-         if (mouse.getButton() == MouseEvent.BUTTON1 && vehicle.isMouseOver(mouse.getX(), mouse.getY())) {
-            vehicle.setSelected(true);
-         } else if (mouse.getButton() == MouseEvent.BUTTON3 && vehicle.isMouseOver(mouse.getX(), mouse.getY())) {
-            vehicle.setSelected(false);
-         }
+         switch(mouse.getButton()) {
+            case MouseEvent.BUTTON1:
+               if(vehicle.isMouseOver(mouse.getX(), mouse.getY())) {
+                  vehicle.setSelected(true);
+               }
+               break;
+            case MouseEvent.BUTTON2:
+               if(vehicle.isMouseOver(mouse.getX(), mouse.getY())) { 
+                  vehicle.setSelected(false);
+                  System.out.print(vehicle.isSelected());
+               }
+               break;
+            default:
+               break;
+         }      
       }
 
       this.repaint();

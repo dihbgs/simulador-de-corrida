@@ -40,6 +40,10 @@ public class SimulatorGUI extends JFrame {
         JButton saveData = new JButton("Salvar em arquivo");
         JButton loadData = new JButton("Carregar de arquivo");
 
+        addVehicle.addActionListener(e -> {
+
+        });
+
         rightComponent.add(addVehicle);
         rightComponent.add(removeVehicle);
         rightComponent.add(refuelVehicle);
@@ -67,6 +71,14 @@ public class SimulatorGUI extends JFrame {
         this.setSize(this.getWidth(), 640);
     }
 
+    private int getValidId() {
+        int[] ids = road.getAllIds();
+
+        // to do
+
+        return ids[0];
+    }
+
     public Road getRoad() {
         return this.road;
     }
@@ -74,11 +86,9 @@ public class SimulatorGUI extends JFrame {
     public static void main(String[] args) {
         SimulatorGUI simulator = new SimulatorGUI();
 
-        Vehicle saruruMovel = new Bicycle(16, 16, 64, 64);
-        Vehicle deluluMovel = new Bicycle(16, 96, 64, 64);
-
-        simulator.getRoad().addVehicle(saruruMovel);
-        simulator.getRoad().addVehicle(deluluMovel);
+        for(int i=0; i<20; i++) {
+            simulator.getRoad().addVehicle(new Bicycle().setPosition(0, i));
+        }
 
         simulator.setVisible(true);
     }
