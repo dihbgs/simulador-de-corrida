@@ -1,304 +1,260 @@
+import javax.imageio.ImageIO;
 import java.io.Serializable;
+import java.io.IOException;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
 
 /**
- * Classe que representa um veiculo.
- *
+ * Classe abstrata que representa um veiculo.
+ * 
+ * @see Bike
  * @see Tire
+ * @see Serializable
  */
+public abstract class Vehicle implements Serializable {
+   public static Image BIKE = loadImage("BIKE.png");
 
-public class Vehicle implements Serializable {
-  private static final float FUEL_COST = 0.55f;
-  private static final String[] MODEL_ONE = {
-      "    ____\n",
-      " __/  |_ \\_\n",
-      "|  _     _``-.\n",
-      "'-(_)---(_)--'\n\n"
-  };
+   private final int ID;
 
-  private static final String[] MODEL_TWO = {
-      "  ______\n",
-      " /|_||_\\`.__\n",
-      "(   _    _ _\\ \n",
-      "=`-(_)--(_)-'\n\n"
-  };
+   private transient Image model;
+   private int numberOfTires;
+   private int baseMovement;
+   private Tire[] tires;
+   private int height;
+   private int width;
+   private int x;
+   private int y;
 
-  private final String[] MODEL;
-  private final Tire[] TIRES;
-  private final int ID;
+   /**
+    * Construtor padrao.
+    */
+   Vehicle() {
+      this(null);
+   }
 
-  private float fuel;
-  private int distance;
-  private boolean hasIPVA;
+   /**
+    * Construtor parametrizado.
+    * 
+    * @param model - modelo do veiculo.
+    */
+   Vehicle(Image model) {
+      numberOfTires = 2;
+      initiateTires();
+      this.x = 0;
+      this.y = 0;
+      this.width = 64;
+      this.height = 64;
+      this.model = model;
+      this.baseMovement = 2;
+      this.ID = generateHash();
+   }
 
-  /**
-   * Esse metodo e utilizado para criar um novo veiculo.
-   */
-  public Vehicle() {
-    this.fuel = 2.5f;
-    this.distance = 0;
-    this.TIRES = new Tire[4];
-    this.hasIPVA = (Math.random() > 0.5);
-    this.MODEL = (Math.random() > 0.5) ? Vehicle.MODEL_ONE : Vehicle.MODEL_TWO;
+   /**
+    * Metodo estatico utilizado para carregar um arquivo de imagem do computador.
+    *
+    * @param file - caminho do arquivo.
+    * @return Image - objeto de imagem.
+    */
+   public static Image loadImage(String file) {
+      Image image;
 
-    for (int i = 0; i < 4; i++) {
-      this.TIRES[i] = new Tire();
-    }
-
-    this.ID = this.generateHash();
-  }
-
-  /**
-   * Esse metodo e utilizado para obter o ID do veiculo.
-   *
-   * @param void
-   *
-   * @return int - ID do veiculo.
-   */
-  public int getId() {
-    return this.ID;
-  }
-
-  /**
-   * Esse metodo e utilizado para obter a distancia percorrida pelo veiculo.
-   *
-   * @param void
-   *
-   * @return int - Distancia percorrida pelo veiculo.
-   */
-  public int getDistance() {
-    return this.distance;
-  }
-
-  /**
-   * Esse metodo e utilizado para obter o combustivel restante do veiculo.
-   *
-   * @param void
-   *
-   * @return float - Combustivel restante do veiculo.
-   */
-  public float getFuel() {
-    return this.fuel;
-  }
-
-  /**
-   * Esse metodo e utilizado para obter a situacao do IPVA do veiculo.
-   *
-   * @param void
-   *
-   * @return boolean - Veiculo possui IPVA pago.
-   */
-  public boolean getIpva() {
-    return this.hasIPVA;
-  }
-
-  /**
-   * Esse metodo e utilizado para obter as rodas do veiculo.
-   *
-   * @return Tire[] - Rodas do veiculo.
-   *
-   * @param void
-   */
-  public Tire[] getTires() {
-    return this.TIRES;
-  }
-
-  /**
-   * Esse metodo e utilizado para obter uma roda especifica do veiculo.
-   *
-   * @param int - ID da roda a ser obtida (0, 1, 2 ou 3).
-   *
-   * @return Tire - Roda especifica do veiculo.
-   */
-  public Tire getTire(int tireId) {
-    if (tireId < 0 || tireId > 3) {
-      System.out.println("ID do pneu invalido!");
-      return null;
-    }
-
-    return this.TIRES[tireId];
-  }
-
-  /**
-   * Esse metodo e utilizado para reabastecer o veiculo.
-   *
-   * @param float - Quantidade de combustivel a ser adicionada.
-   *
-   * @return void
-   */
-  public void refuel(float fuel) {
-    if (fuel < 0) {
-      System.out.println("Quantidade de combustivel invalida!");
-      return;
-    }
-
-    this.fuel += fuel;
-    System.out.println("Veiculo #" + this.ID + " abastecido com " + fuel + " litros de combustivel.");
-  }
-
-  /**
-   * Esse metodo e utilizado para calibrar todos os pneus do veiculo.
-   *
-   * @param tireId - ID do pneu a ser calibrado (0, 1, 2 ou 3).
-   *
-   * @return void
-   */
-  public void calibrateTire(int tireId) {
-    if (tireId < 0 || tireId > 3) {
-      System.out.println("ID do pneu invalido!");
-      return;
-    }
-
-    this.TIRES[tireId].setCalibration(true);
-    System.out.println("Pneu #" + (tireId + 1) + " calibrado!");
-  }
-
-  /**
-   * Esse metodo e utilizado para calibrar todos os pneus do veiculo.
-   *
-   * @param void
-   *
-   * @return void
-   */
-  public void calibrateAllTires() {
-    for (int i = 0; i < 4; i++) {
-      this.TIRES[i].setCalibration(true);
-    }
-  }
-
-  /**
-   * Esse metodo e utilizado para esvaziar todos os pneus do veiculo.
-   *
-   * @param void
-   *
-   * @return void
-   */
-  public void emptyAllTires() {
-    for (int i = 0; i < 4; i++) {
-      this.TIRES[i].setCalibration(false);
-    }
-  }
-
-  /**
-   * Esse metodo e utilizado para esvaziar um pneu do veiculo.
-   *
-   * @param int - ID do pneu a ser esvaziado (0, 1, 2 ou 3).
-   *
-   * @return void
-   */
-  public void emptyTire(int tireId) {
-    if (tireId < 0 || tireId > 3) {
-      System.out.println("ID do pneu invalido!");
-      return;
-    }
-
-    this.TIRES[tireId].setCalibration(false);
-    System.out.println("Pneu #" + (tireId + 1) + " esvaziado!");
-  }
-
-  /**
-   * Esse metodo e utilizado para desenhar o veiculo.
-   *
-   * @param void
-   *
-   * @return void
-   */
-  public void draw() {
-    String blocksMoved = "";
-
-    for (int i = 0; i < distance; i++) {
-      blocksMoved += "     ";
-    }
-
-    for (int i = 0; i < 4; i++) {
-      System.out.print(blocksMoved + this.MODEL[i]);
-    }
-  }
-
-  /**
-   * Esse metodo e utilizado para mover o veiculo.
-   *
-   * @param void
-   *
-   * @return void
-   */
-  public void move() {
-    if (!this.canMove()) {
-      System.out.println("Veiculo #" + this.ID + " nao pode se mover!");
-      return;
-    }
-
-    this.fuel -= Vehicle.FUEL_COST;
-    this.distance += 1;
-    System.out.println("Veiculo #" + this.ID + " se moveu!");
-  }
-
-  /**
-   * Esse metodo e utilizado para imprimir informacoes sobre o veiculo.
-   *
-   * @param void
-   *
-   * @return String - Informacoes sobre o veiculo.
-   *
-   * @see java.lang.Object#toString()
-   */
-  public String toString() {
-    return "Veículo #" + this.ID + " - " + (this.hasIPVA ? "Com" : "Sem") + " IPVA";
-  }
-
-  /**
-   * Esse metodo e utilizado para verificar se o veiculo tem combustivel
-   * suficiente para se mover
-   *
-   * @return boolean - Se o veiculo tem combustivel suficiente para se mover.
-   */
-  private boolean hasEnoughFuel() {
-    return this.fuel >= Vehicle.FUEL_COST;
-  }
-
-  /**
-   * Esse metodo e utilizado para verificar se o veiculo esta com todas as rodas
-   * calibradas.
-   *
-   * @return boolean - Se o veiculo esta com todas as rodas calibradas.
-   *
-   * @see Tire#getCalibration()
-   */
-  private boolean isFullyCalibrated() {
-    for (int i = 0; i < 4; i++) {
-      if (!this.TIRES[i].getCalibration()) {
-        return false;
+      try {
+         image = ImageIO.read(new File("src/" + file));
+      } catch (IOException e) {
+         System.err.println("Falha ao carregar imagem.");
+         image = null;
       }
-    }
 
-    return true;
-  }
+      return image;
+   }
 
-  /**
-   * Esse metodo e utilizado para verificar se o veiculo pode se mover.
-   *
-   * @return boolean - Se o veiculo pode se mover.
-   */
-  private boolean canMove() {
-    return this.hasEnoughFuel() && this.isFullyCalibrated() && this.hasIPVA;
-  }
+   /**
+    * Metodo utilizado para mover um veiculo.
+    *
+    * @return boolean - se o veiculo se moveu com sucesso.
+    */
+   public boolean move() {
+      if (!areTiresCalibrated()) {
+         return false;
+      }
 
-  /**
-   * Esse metodo e utilizado para gerar o ID do veiculo.
-   *
-   * @return int - ID do veiculo.
-   *
-   * @see java.lang.Object#hashCode()
-   */
-  private int generateHash() {
-    int hash = this.hashCode() % 100000;
+      this.setX(this.getX() + this.baseMovement);
+      return true;
+   }
 
-    for (int i = 0; i < 4; i++) {
-      hash += this.TIRES[i].hashCode() % 100000;
-      hash = (int) Math.floor(hash / 7);
-    }
+   /**
+    * Metodo utilizado para desenhar o veiculo na pista.
+    * 
+    * @param graphics - objeto contendo o contexto grafico para desenhar na pista.
+    * @param road     - pista.
+    */
+   public void draw(Graphics graphics, Road road) {
+      graphics.drawImage(model, (int) Math.floor(0.5 * x * width), y * height, width, height, road);
+   }
 
-    hash = Math.abs(hash) % 1000;
+   /**
+    * Metodo que retorna o valor total que um veiculo pode se mover de uma vez.
+    * 
+    * @return int - quantia total de movimento do veiculo.
+    */
+   public int getFullMovement() {
+      return this.x * this.baseMovement;
+   }
 
-    return hash;
-  }
+   /**
+    * Metodo que retorna a posicao horizontal do veiculo.
+    * 
+    * @return int - posicao horizontal.
+    */
+   public int getX() {
+      return this.x;
+   }
+
+   /**
+    * Metodo que retorna a posicao vertical do veiculo.
+    * 
+    * @return int - posicao vertical.
+    */
+   public int getY() {
+      return this.y;
+   }
+
+   /**
+    * Metodo que retorna o movimento base do veiculo.
+    * 
+    * @return int - movimento base.
+    */
+   public int getBaseMovement() {
+      return this.baseMovement;
+   }
+
+   /**
+    * Metodo que retorna a quantia de rodas do veiculo.
+    * 
+    * @return int - quantia de rodas.
+    */
+   public int getNumberOfTires() {
+      return this.numberOfTires;
+   }
+
+   /**
+    * Metodo que registra a posicao horizontal do veiculo.
+    * 
+    * @param x - posicao horizontal.
+    */
+   public void setX(int x) {
+      this.x = x;
+   }
+
+   /**
+    * Metodo que registra a posicao vertical do veiculo.
+    * 
+    * @param y - posicao vertical.
+    */
+   public void setY(int y) {
+      this.y = y;
+   }
+
+   /**
+    * Metodo que registra o modelo do veiculo.
+    * 
+    * @param model - modelo do veiculo.
+    */
+   public void setModel(Image model) {
+      this.model = model;
+   }
+
+   /**
+    * Metodo que registra a quantidade de rodas do veiculo.
+    * 
+    * @param numberOfTires - quantidade de rodas.
+    */
+   public void setNumberOfTires(int numberOfTires) {
+      this.numberOfTires = numberOfTires;
+   }
+
+   /**
+    * Metodo que registra o movimento base do veiculo.
+    * 
+    * @param movementAmount - movimento base.
+    */
+   public void setBaseMovement(int movementAmount) {
+      this.baseMovement = movementAmount;
+   }
+
+   /**
+    * Metodo que recarrega o modelo do veiculo.
+    * 
+    * @see Image
+    */
+   public void reloadImage() {
+      this.model = Vehicle.BIKE;
+   }
+
+   /**
+    * Metodo que retorna o ID do veiculo.
+    * 
+    * @return int - ID do veiculo.
+    */
+   public int getID() {
+      return this.ID;
+   }
+
+   /**
+    * Metodo que retorna uma array de rodas.
+    * 
+    * @return Tire[] - rodas.
+    * @see Tire
+    */
+   public Tire[] getTires() {
+      return this.tires;
+   }
+
+   /**
+    * Metodo para criar as rodas do veiculo.
+    * 
+    * @see Tire
+    */
+   public void initiateTires() {
+      this.tires = new Tire[numberOfTires];
+
+      for (int i = 0; i < numberOfTires; i++) {
+         this.tires[i] = new Tire();
+      }
+   }
+
+   /**
+    * Metodo que verifica se todas as rodas estao calibradas.
+    * 
+    * @return boolean - se todas as rodas estao calibradas.
+    * @see Tire
+    */
+   public boolean areTiresCalibrated() {
+      for (int i = 0; i < this.numberOfTires; i++) {
+         if (this.tires[i].isCalibrated()) {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   /**
+    * Metodo privado para geracao de ID do veiculo.
+    * 
+    * @return int - ID do veiculo.
+    */
+   private int generateHash() {
+      int hash = this.hashCode() % 100000;
+
+      for (int i = 0; i < this.numberOfTires; i++) {
+         hash += this.tires[i].hashCode() % 100000;
+         hash = (int) Math.floor(hash / 7);
+      }
+
+      hash = Math.abs(hash) % 1000;
+
+      return hash;
+   }
 }
