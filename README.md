@@ -4,7 +4,7 @@ Este repositório contém o código fonte e a documentação do meu trabalho da 
 
 O projeto consiste em um simulador de corrida com quatro tipos de veículos: **bicicleta, motocicleta, carro e carro de passeio**. Os veículos são implementados como classes em um _sistema hierárquico de herança_.
 
-![Preview do Projeto](src/preview.png)
+![Preview do Projeto](assets/preview.png)
 
 ## Estrutura do Projeto
 
@@ -37,7 +37,7 @@ Para executar o simulador de corrida, siga as instruções abaixo:
 
 ## Documentação
 
-- [Diagrama de Classes](UMLDiagram.pdf): Diagrama de classes do projeto.
+- [Diagrama de Classes](assets/diagram.pdf): Diagrama de classes do projeto.
 
 ## Licença
 
