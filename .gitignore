@@ -2,10 +2,10 @@
 *.dat
 
 # javadoc
-doc/
+doc
 
 # java classes
 *.class
 
-# deprecated files
-*Deprecated.java
+# binaries
+bin
