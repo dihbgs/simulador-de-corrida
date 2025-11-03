@@ -1,3 +1,5 @@
+package simulator;
+
 import javax.swing.JOptionPane;
 import javax.swing.JComponent;
 import java.awt.Graphics2D;

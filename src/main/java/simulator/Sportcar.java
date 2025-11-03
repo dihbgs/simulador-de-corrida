@@ -1,3 +1,5 @@
+package simulator;
+
 /**
  * Classe que representa um carro esportivo.
  * 

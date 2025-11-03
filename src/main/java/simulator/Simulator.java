@@ -1,3 +1,5 @@
+package simulator;
+
 import java.io.FileNotFoundException;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
